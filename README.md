@@ -85,5 +85,9 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+1. **RwLock >< Mutex**  
+RwLock is used because the notification list is frequently read and only occasionally written, allowing multiple readers to access it concurrently. Mutex would block all access even for reads. Therefore, RwLock provides better concurrency for read-heavy workloads.
+2. **Rust static >< Java static (lazy_static)**  
+Rust does not allow mutable static variables by default because it cannot guarantee thread safety at compile time. This differs from Java, where static variables can be freely mutated but may lead to runtime issues. Therefore, lazy_static is used with synchronization primitives to safely initialize and mutate shared data.
 
 #### Reflection Subscriber-2
