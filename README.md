@@ -91,3 +91,9 @@ RwLock is used because the notification list is frequently read and only occasio
 Rust does not allow mutable static variables by default because it cannot guarantee thread safety at compile time. This differs from Java, where static variables can be freely mutated but may lead to runtime issues. Therefore, lazy_static is used with synchronization primitives to safely initialize and mutate shared data.
 
 #### Reflection Subscriber-2
+1. **Q1**  
+I checked files outside the tutorial scope such as src/lib.rs to understand how environment variables and configuration are loaded. I learned that these components simplify dependency sharing across modules. However, I did not modify them to keep consistency with the tutorial hehe :)
+2. **Q2**   
+The Observer pattern decouples publisher and subscribers, so adding more receivers is straightforward by simply registering them. In contrast, spawning multiple Main apps would require synchronization or shared storage.
+3. **Q3**  
+I did not create additional tests. However, I tested multiple scenarios by running several Receiver instances, which helped me verify that the notification system works correctly for multiple subscribers.
