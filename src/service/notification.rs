@@ -14,7 +14,7 @@ pub struct NotificationService;
 
 impl NotificationService {
     pub fn subscribe(product_type: &str) -> Result<SubscriberRequest> {
-        let product_type_clone: String = String::from(product_type);
+        let product_type_clone = String::from(product_type);
         return thread::spawn(move || Self::subscribe_request(product_type_clone))
             .join().unwrap();
     }
@@ -29,6 +29,7 @@ impl NotificationService {
             name: APP_CONFIG.get_instance_name().to_string(),
             url: notification_receiver_url
         };
+
         let request_url: String = format!("{}/notification/subscribe/{}",
             APP_CONFIG.get_publisher_root_url(), product_type_str);
         let request = REQWEST_CLIENT
@@ -37,7 +38,7 @@ impl NotificationService {
             .header("Accept", "application/json")
             .body(to_string(&payload).unwrap())
             .send().await;
-        log::warn!("Sent subscribe request to: {}", request_url);
+        log::warn_!("Sent subscribe request to: {}", request_url);
 
         return match request {
             Ok(f) => match f.json::<SubscriberRequest>().await {
@@ -55,17 +56,18 @@ impl NotificationService {
     }
 
     pub fn unsubscribe(product_type: &str) -> Result<SubscriberRequest> {
-        let product_type_clone: String = String::from(product_type);
-        return thread::spawn(move || Self::unsubscribe_request(product_type_clone))
+        let product_type_clone = String::from(product_type);
+        return thread::spawn(move|| Self::unsubscribe_request(product_type_clone))
             .join().unwrap();
     }
 
     #[tokio::main]
     async fn unsubscribe_request(product_type: String) -> Result<SubscriberRequest> {
-        let product_type_upper: String = product_type.to_uppercase();
-        let product_type_str: &str = product_type_upper.as_str();
+        let product_type_upper = product_type.to_uppercase();
+        let product_type_str: &str = &product_type_upper.as_str();
         let notification_receiver_url: String = format!("{}/receive",
             APP_CONFIG.get_instance_root_url());
+
         let request_url: String = format!("{}/notification/unsubscribe/{}?url={}",
             APP_CONFIG.get_publisher_root_url(), product_type_str, notification_receiver_url);
         let request = REQWEST_CLIENT
@@ -73,12 +75,12 @@ impl NotificationService {
             .header("Content-Type", "application/json")
             .header("Accept", "application/json")
             .send().await;
-        log::warn!("Sent unsubscribe request to: {}", request_url);
+        log::warn_!("Sent unsubscribe request to: {}", request_url);
 
         return match request {
             Ok(f) => match f.json::<SubscriberRequest>().await {
                 Ok(x) => Ok(x),
-                Err(_) => Err(compose_error_response(
+                Err(_y) => Err(compose_error_response(
                     Status::NotFound,
                     String::from("Already unsubscribed to the topic.")
                 ))
@@ -95,7 +97,7 @@ impl NotificationService {
         return Ok(subscriber_result);
     }
 
-    pub fn list_messages() -> Result<Vec<String>> {
+    pub fn list_message() -> Result<Vec<String>> {
         return Ok(NotificationRepository::list_all_as_string());
     }
 }

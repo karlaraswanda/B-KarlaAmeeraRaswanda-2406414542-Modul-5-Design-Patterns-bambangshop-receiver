@@ -7,7 +7,7 @@ use crate::model::notification::Notification;
 // Singleton of Database
 lazy_static! {
     static ref NOTIFICATIONS: RwLock<Vec<Notification>> = RwLock::new(vec![]);
-}
+ }
 
 pub struct NotificationRepository;
 
@@ -19,7 +19,7 @@ impl NotificationRepository {
     }
 
     pub fn list_all_as_string() -> Vec<String> {
-    return NOTIFICATIONS.read().unwrap()
-        .iter().map(|f| format!("{}", f.clone())).collect();
+        return NOTIFICATIONS.read().unwrap()
+            .iter().map(|f| format!("{}", f.clone())).collect();
     }
 }
